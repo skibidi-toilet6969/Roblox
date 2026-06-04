@@ -3,17 +3,77 @@
 --Press "R" To Reload The Invisible Wall Remover
 --Press "L" To Activate The Save And TP Script, "," To Save The Current Position, "T" To Load The Saved Position
 --Note That After You Went From Menu To The Game, You Have To Press "L" Again To Activate Save And TP Script
-local nameUnusual1 = "EclipseLove"
-local nameUnusual2 = "ToxicInferno"
+local rightLeg = game.Workspace.Game.Players.nguyenvudung112:WaitForChild("Right Leg")
+--local nameUnusual1 = "Charming Heart"
+--local nameUnusual2 = "ToxicInferno"
 local nameEmote1 = "SnowmobileCruise"
 local nameEmote2 = "Broom"
 local nameEmote3 = "BoldMarch"
 local nameEmote4 = "RockinStride"
 local function saveAndTP() local UserInputService = game:GetService("UserInputService");local shortcut = game.workspace.Game.Players;local playerName = game.Players.LocalPlayer.Name;local playerFolder = shortcut:FindFirstChild(playerName);if not playerFolder then return end;local HRP = playerFolder:FindFirstChild("HumanoidRootPart");if not HRP then return end;local position;UserInputService.InputBegan:Connect(function(input, gameProcessed) if gameProcessed then return end;if input.KeyCode == Enum.KeyCode.Comma then position = HRP.Position;print("Saved, Position: ", HRP.Position) end;if input.KeyCode == Enum.KeyCode.T then if not position then return end;HRP.Position = position; print("Loaded, Position: ", HRP.Position) end end) end
-local function changeUnusual() local function toggleNames(root) for _, obj in ipairs(root:GetDescendants()) do if obj.Name == nameUnusual1 then obj.Name = nameUnusual2;elseif obj.Name == nameUnusual2 then obj.Name = nameUnusual1 end end end;toggleNames(game:GetService("Players").LocalPlayer);toggleNames(game:GetService("Workspace"));toggleNames(game:GetService("ReplicatedStorage")) end
+--local function changeUnusual() local function toggleNames(root) for _, obj in ipairs(root:GetDescendants()) do if obj.Name == nameUnusual1 then obj.Name = nameUnusual2;elseif obj.Name == nameUnusual2 then obj.Name = nameUnusual1 end end end;toggleNames(game:GetService("Players").LocalPlayer);toggleNames(game:GetService("Workspace"));toggleNames(game:GetService("ReplicatedStorage")) end
 local function changeEmote1() local function toggleNames(root) for _, obj in ipairs(root:GetDescendants()) do if obj.Name == nameEmote1 then obj.Name = nameEmote2;elseif obj.Name == nameEmote2 then obj.Name = nameEmote1;end end end;toggleNames(game:GetService("Players").LocalPlayer);toggleNames(game:GetService("Workspace"));toggleNames(game:GetService("ReplicatedStorage"));changeUnusual() end
 local function changeEmote2() local function toggleNames(root) for _, obj in ipairs(root:GetDescendants()) do if obj.Name == nameEmote3 then obj.Name = nameEmote4 elseif obj.Name == nameEmote4 then obj.Name = nameEmote3 end end end;toggleNames(game:GetService("Players").LocalPlayer);toggleNames(game:GetService("Workspace"));toggleNames(game:GetService("ReplicatedStorage"));changeEmote1() end
-local function changeDaylight() local Lighting = game:GetService("Lighting");local function changeTime() Lighting.ClockTime = 12 end;changeTime();Lighting.Changed:Connect(changeTime) end
+local function changeDaylight()
+    local rainsound = game.Workspace.Camera.Outdoors
+    local rainvisual = game.Workspace.Camera.Rain
+    local Lighting = game:GetService("Lighting")
+    local function changeTime()
+        rainvisual:Destroy()
+        rainsound:Destroy()
+        Lighting.ClockTime = 12
+        Lighting.Sky:Destroy()
+    end
+    changeTime()
+    Lighting.Changed:Connect(changeTime)
+end
+local function HLAKB()
+    local alwaystrue = game
+    local shortcut = game.workspace.Game.Players
+    local playerName = game.Players.LocalPlayer.Name
+
+    local player = shortcut:FindFirstChild(playerName)
+    if not player then return end
+
+    local head = player:FindFirstChild("Head")
+
+    local rightleg = player:FindFirstChild("Right Leg")
+
+    local alreadyKorblox = player:FindFirstChild("KorbloxRightLeg")
+
+    -- add "--" to the line that you dont want to remove
+    if alwaystrue then
+        if head then
+            head.Transparency = 1
+        end
+        if rightleg then
+            rightleg.Transparency = 1
+        end
+        -- Korblox Right Leg Spawn
+        if not alreadyKorblox then
+            local korbloxLeg = Instance.new("Part")
+            korbloxLeg.Name = "KorbloxRightLeg"
+            korbloxLeg.Size = Vector3.new(1,1,1)
+            korbloxLeg.CanCollide = false
+            korbloxLeg.Massless = true
+            korbloxLeg.Parent = player
+
+            local mesh = Instance.new("SpecialMesh")
+            mesh.MeshType = Enum.MeshType.FileMesh
+            mesh.MeshId = "rbxassetid://101851696"
+            mesh.TextureId = "rbxassetid://101851254"
+            mesh.Scale = Vector3.new(1,1,1)
+            mesh.Parent = korbloxLeg
+
+            korbloxLeg.CFrame = rightleg.CFrame
+
+            local weld = Instance.new("WeldConstraint")
+            weld.Part0 = korbloxLeg
+            weld.Part1 = rightleg
+            weld.Parent = korbloxLeg
+        end
+    end
+end
 local function wallRemover()
     local Players=game:GetService("Players")
     local Workspace=game:GetService("Workspace")
@@ -130,6 +190,9 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         saveAndTP()
     end
 end)
+if rightLeg then
+    HLAKB()
+end
 wallRemover()
 changeDaylight()
 changeEmote2()
